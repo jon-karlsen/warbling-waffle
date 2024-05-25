@@ -1,4 +1,5 @@
 use axum::{ routing::get , Router };
+use tower_http::services::ServeDir;
 use tracing::info;
 use tracing_subscriber::{ layer::SubscriberExt , util::SubscriberInitExt };
 
@@ -18,9 +19,11 @@ async fn main() -> anyhow::Result<()> {
 
     info!( "Initialising app..." );
 
-    let app      = Router::new()
-                    .route( "/" , get( hello ));
-    let listener = tokio::net::TcpListener::bind( "0.0.0.0:3000" ).await.unwrap();
+    let assets_path = std::env::current_dir().unwrap();
+    let app         = Router::new()
+                        .route( "/" , get( hello ))
+                        .nest_service( "/assets" , ServeDir::new( format!( "{}/assets" , assets_path.to_str().unwrap() ) ) );
+    let listener    = tokio::net::TcpListener::bind( "0.0.0.0:3000" ).await.unwrap();
 
     info!( "Initialisation complete" );
 
