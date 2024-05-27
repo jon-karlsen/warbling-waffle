@@ -1,13 +1,11 @@
-use axum::{ routing::get , Router };
-use tower_http::services::ServeDir;
-use tracing::info;
-use tracing_subscriber::{ layer::SubscriberExt , util::SubscriberInitExt };
-
-
+mod controller;
 mod view;
 
 
-use crate::view::hello;
+use tracing::info;
+use tracing_subscriber::{ layer::SubscriberExt , util::SubscriberInitExt };
+use std::sync::Arc;
+use crate::controller::{ app_state , init_app , init_listener };
 
 
 #[ tokio::main ]
@@ -19,11 +17,9 @@ async fn main() -> anyhow::Result<()> {
 
     info!( "Initialising app..." );
 
-    let assets_path = std::env::current_dir().unwrap();
-    let app         = Router::new()
-                        .route( "/" , get( hello ))
-                        .nest_service( "/assets" , ServeDir::new( format!( "{}/assets" , assets_path.to_str().unwrap() ) ) );
-    let listener    = tokio::net::TcpListener::bind( "0.0.0.0:3000" ).await.unwrap();
+    let app_state = Arc::new( app_state::AppState::new( vec![].into() ) );
+    let app       = init_app( app_state );
+    let listener  = init_listener().await;
 
     info!( "Initialisation complete" );
 

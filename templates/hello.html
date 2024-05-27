@@ -1,10 +1,21 @@
-<!doctype html>
-<html lang='en'>
-    <head>
-        <link href='/assets/main.css'                rel='stylesheet' />
-        <link href='https://rsms.me/inter/inter.css' rel='stylesheet' />
-    </head>
-    <body>
-        <h1 class='text-zinc-500 text-xl'>Hey</h1>
-    </body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Hello!{% endblock %}
+
+{% block content %}
+    <h1 class='text-xl text-slate-500'>Hello!</h1>
+    <a href='/goodbye' class='text-indigo-500 underline hover:text-indigo-300'>
+        Goodbye
+    </a>
+    <button
+           type='button'
+         hx-get='/api/hello'
+        hx-swap='innerHtml'
+          class="rounded-md bg-indigo-600 px-2.5 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+    >
+        Say hello
+    </button>
+
+{% include "todo-form.html" %}
+
+{% endblock %}

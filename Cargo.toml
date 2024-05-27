@@ -3,6 +3,10 @@ name = "warbling-waffle"
 version = "0.1.0"
 edition = "2021"
 
+[[bin]]
+name = "WarblingWaffle"
+path = "src/main.rs"
+
 [dependencies]
 anyhow = "1.0.86"
 askama = "0.12.1"

@@ -25,7 +25,18 @@ impl<T> IntoResponse for HtmlTemplate<T>
 struct HelloTemplate;
 
 
+#[ derive( Template )]
+#[ template( path = "goodbye.html" )]
+struct GoodbyeTemplate;
+
+
 pub async fn hello() -> impl IntoResponse {
     let template = HelloTemplate {};
+    HtmlTemplate( template )
+}
+
+
+pub async fn goodbye() -> impl IntoResponse {
+    let template = GoodbyeTemplate {};
     HtmlTemplate( template )
 }
